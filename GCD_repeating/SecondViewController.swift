@@ -36,8 +36,13 @@ class SecondViewController: UIViewController {
         imageURL = URL(string: "https://kazved.ru/images/uploads/7fe88cb8b79911d85af34a40b8760fe1.jpg")
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-        guard let url = imageURL,let imageData = try? Data(contentsOf: url) else {return}
-        self.image = UIImage(data: imageData)
+        let queue = DispatchQueue.global(qos: .utility)
+        queue.async {
+            guard let url = self.imageURL,let imageData = try? Data(contentsOf: url) else {return}
+            DispatchQueue.main.async {
+                self.image = UIImage(data: imageData)
+            }
+        }
     }
 }
 
